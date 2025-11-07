@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaPaperPlane } from "react-icons/fa6";
+import { FaPaperPlane, FaArrowLeft, FaClock } from "react-icons/fa6";
+import { useIntl } from "react-intl";
 import {
   addDoc,
   collection,
@@ -14,7 +15,6 @@ import {
   Container,
   Paper,
   Box,
-  Button,
   Typography,
   List,
   ListItem,
@@ -31,9 +31,11 @@ const Chat = () => {
   const { chatPath } = useParams<{ chatPath: string }>();
 
   const navigate = useNavigate();
+  const intl = useIntl();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
 
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const participants = chatPath ? chatPath.split("-") : [];
 
   const currentUser = auth.currentUser;
@@ -48,6 +50,7 @@ const Chat = () => {
 
   // Load messages
   useEffect(() => {
+    if (!currentUser) return;
     const messagesRef = collection(db, "chats", chatId, "messages");
     const q = query(messagesRef, orderBy("createdAt", "asc"));
 
@@ -88,25 +91,45 @@ const Chat = () => {
     return `${hours}:${minutes}`;
   };
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (
     <Container maxWidth="sm">
       <Paper sx={{ p: 3, mt: 5, borderRadius: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          <Button
-            variant="text"
-            sx={{ mt: 2 }}
-            onClick={() => navigate("/users")}
-          >
-            ←
-          </Button>
-          Chat with {recipientUsername}
+        <Typography
+          variant="h6"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            // background: "red",
+            padding: "10px 15px 10px 0",
+          }}
+        >
+          <button className="back" onClick={() => navigate("/users")}>
+            <FaArrowLeft />
+          </button>
+          <div>
+            {intl.formatMessage({
+              id: "chat.with",
+            })}{" "}
+            {recipientUsername}
+          </div>
         </Typography>
 
         <List
           sx={{
+            height: 400,
             maxHeight: 400,
             overflowY: "auto",
             mb: 2,
+            background: "rgba(0,0,0,.2)",
+            borderRadius: "5px",
             "&::-webkit-scrollbar": { width: 0, background: "transparent" },
           }}
         >
@@ -126,7 +149,10 @@ const Chat = () => {
                   color: msg.sender === currentUsername ? "white" : "black",
                   px: 2,
                   py: 1,
-                  borderRadius: 2,
+                  borderRadius:
+                    msg.sender === currentUsername
+                      ? "20px 0 20px 20px"
+                      : "0 20px 20px 20px",
                   display: "inline-block", // širina zavisi od sadržaja
                   maxWidth: "75%",
                 }}
@@ -148,22 +174,33 @@ const Chat = () => {
                   }}
                 >
                   <span>{msg.sender}</span>
-                  <span>{formatTime(msg.createdAt)}</span>
+                  <span style={{ marginLeft: "10px" }}>
+                    {msg.createdAt ? (
+                      <span>{formatTime(msg.createdAt)}</span>
+                    ) : (
+                      <FaClock style={{ fontSize: "0.75rem", opacity: 0.7 }} />
+                    )}
+                  </span>
                 </Box>
               </Box>
             </ListItem>
           ))}
+          <div ref={messagesEndRef} />
         </List>
 
         <Box
           component="form"
+          id="message-form"
           onSubmit={handleSend}
           sx={{ display: "flex", gap: 1 }}
         >
           <input
             type="text"
-            placeholder="Poruka"
+            placeholder={intl.formatMessage({
+              id: "message.placeholder",
+            })}
             className="message-input"
+            id="message-input"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />

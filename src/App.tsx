@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate, Link } from "react-router-dom";
+import { Select, MenuItem } from "@mui/material";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/LogIn";
 import Signup from "./components/SignUp";
 import Users from "./pages/Users";
@@ -7,7 +8,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import { useEffect, useState } from "react";
 
-function App() {
+function App({ setLocale }: { setLocale: (lang: "sr" | "en") => void }) {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +24,28 @@ function App() {
 
   return (
     <>
-      <nav>{!user ? <Link to={"/login"}>LogIn</Link> : "Chat"}</nav>
+      <nav>
+        <Select
+          value={localStorage.getItem("locale") || "sr"}
+          onChange={(e) => {
+            const newLocale = e.target.value as "sr" | "en";
+            setLocale(newLocale);
+            localStorage.setItem("locale", newLocale);
+          }}
+          size="small"
+          id="language"
+          name="language"
+          sx={{
+            color: "white",
+            border: "1px solid white",
+            "& .MuiSelect-icon": { color: "white" },
+          }}
+        >
+          <MenuItem id="language-sr" value="sr">SR</MenuItem>
+          <MenuItem id="language-en" value="en">EN</MenuItem>
+        </Select>
+      </nav>
+
       <div className="container">
         <Routes>
           <Route

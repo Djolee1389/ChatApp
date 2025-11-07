@@ -1,0 +1,26 @@
+{
+  "form.login": "LogIn",
+  "form.signup": "SignUp",
+  "form.username": "Username",
+
+  "form.password.confirm": "Repeat password",
+  "form.password": "Password",
+  "form.signup.message": "Don't have an account?",
+  "form.signup.link": "Sign Up",
+
+  "error.email": "Email is required",
+  "error.email.format": "Invalid Email format",
+  "error.username": "Username is required",
+  "error.password": "Password is required",
+  "error.password.short": "Password is too short",
+  "error.password.confirm": "Passwords do not match",
+  "error.login": "Invalid login credentials",
+
+  "logout": "Logout",
+  "logout.confirm": "Are you sure you want to log out?",
+  "chat": "Chat",
+  "chat.with": "Chat with ",
+  "message.placeholder": "Message",
+
+  "dummy": "Dummy"
+}

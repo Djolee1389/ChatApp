@@ -1,0 +1,26 @@
+{
+  "form.login": "Prijava",
+  "form.signup": "Registracija",
+  "form.username": "Korisnicko ime",
+
+  "form.password.confirm": "Ponovite lozinku",
+  "form.password": "Lozinka",
+  "form.signup.message": "Nemate nalog?",
+  "form.signup.link": "Registrujte se",
+
+  "error.email": "Email adresa je obavezna",
+  "error.email.format": "Neispravan format Email adrese",
+  "error.username": "Korisnicko ime je obavezno",
+  "error.password": "Lozinka je obavezna",
+  "error.password.short": "Lozinka je prekratka",
+  "error.password.confirm": "Lozinke se ne poklapaju",
+  "error.login": "Neispravni podaci za prijavu",
+
+  "logout": "Odjava",
+  "logout.confirm": "Da li ste sigurni da zelite da se odjavite?",
+  "chat": "Poruka",
+  "chat.with": "Razgovor sa ",
+  "message.placeholder": "Poruka",
+
+  "dummy": "Dummy"
+}

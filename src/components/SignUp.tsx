@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 // import { auth } from "../firebase";
+import { useIntl } from "react-intl";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import type { User } from "firebase/auth";
@@ -33,6 +34,7 @@ const SignUp: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
+  const intl = useIntl();
 
   const {
     register,
@@ -89,17 +91,27 @@ const SignUp: React.FC = () => {
           Sign Up
         </Typography>
 
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          autoComplete="off"
+        >
           <TextField
             label="Email"
             type="email"
             fullWidth
+            autoComplete="off"
             margin="normal"
             {...register("email", {
-              required: "Email is required",
+              required: intl.formatMessage({
+                id: "error.email",
+              }),
               pattern: {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "Invalid email format",
+                message: intl.formatMessage({
+                  id: "error.email.format",
+                }),
               },
             })}
             error={!!errors.email}
@@ -107,26 +119,36 @@ const SignUp: React.FC = () => {
           />
 
           <TextField
-            label="Username"
+            label={intl.formatMessage({
+              id: "form.username",
+            })}
             fullWidth
             margin="normal"
             {...register("displayName", {
-              required: "Username is required",
+              required: intl.formatMessage({
+                id: "error.username",
+              }),
             })}
             error={!!errors.displayName}
             helperText={errors.displayName?.message}
           />
 
           <TextField
-            label="Password"
+            label={intl.formatMessage({
+              id: "form.password",
+            })}
             type="password"
             fullWidth
             margin="normal"
             {...register("password", {
-              required: "Password is required",
+              required: intl.formatMessage({
+                id: "error.password",
+              }),
               minLength: {
                 value: 6,
-                message: "Password must be at least 6 characters",
+                message: intl.formatMessage({
+                  id: "error.password.short",
+                }),
               },
             })}
             error={!!errors.password}
@@ -134,13 +156,18 @@ const SignUp: React.FC = () => {
           />
 
           <TextField
-            label="Confirm Password"
+            label={intl.formatMessage({
+              id: "form.password.confirm",
+            })}
             type="password"
             fullWidth
             margin="normal"
             {...register("confirmPassword", {
               validate: (value) =>
-                value === password || "Passwords do not match",
+                value === password ||
+                `${intl.formatMessage({
+                  id: "error.password.confirm",
+                })}`,
             })}
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword?.message}
@@ -159,7 +186,13 @@ const SignUp: React.FC = () => {
             sx={{ mt: 2, mb: 1 }}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : "Sign Up"}
+            {loading ? (
+              <CircularProgress size={24} />
+            ) : (
+              intl.formatMessage({
+                id: "form.signup",
+              })
+            )}
           </Button>
         </Box>
       </Paper>
