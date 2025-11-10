@@ -7,10 +7,13 @@ import Chat from "./components/Chat";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 
 function App({ setLocale }: { setLocale: (lang: "sr" | "en") => void }) {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  const intl = useIntl();
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
@@ -20,7 +23,15 @@ function App({ setLocale }: { setLocale: (lang: "sr" | "en") => void }) {
     return unsub;
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <p style={{ fontSize: 40, color: "white" }}>
+        {intl.formatMessage({
+          id: "loading",
+        })}
+        ...
+      </p>
+    );
 
   return (
     <>
@@ -41,8 +52,12 @@ function App({ setLocale }: { setLocale: (lang: "sr" | "en") => void }) {
             "& .MuiSelect-icon": { color: "white" },
           }}
         >
-          <MenuItem id="language-sr" value="sr">SR</MenuItem>
-          <MenuItem id="language-en" value="en">EN</MenuItem>
+          <MenuItem id="language-sr" value="sr">
+            SR
+          </MenuItem>
+          <MenuItem id="language-en" value="en">
+            EN
+          </MenuItem>
         </Select>
       </nav>
 

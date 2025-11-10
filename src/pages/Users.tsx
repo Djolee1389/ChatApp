@@ -66,7 +66,7 @@ export default function Users() {
   };
 
   return (
-    <Container sx={{ mt: 4, p: 5 }} className="users-container">
+    <Container sx={{ mt: 4, p: 5, width: 750 }} className="users-container">
       <div
         style={{
           display: "flex",
@@ -74,7 +74,15 @@ export default function Users() {
           alignItems: "center",
         }}
       >
-        <Typography variant="h5" style={{display:"flex",justifyContent:"center", alignItems:"center", gap:"5px"}}>
+        <Typography
+          variant="h5"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+          }}
+        >
           <FaUser style={{ color: "gray" }} />
           {auth.currentUser?.displayName}
         </Typography>

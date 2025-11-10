@@ -21,6 +21,8 @@
   "chat": "Poruka",
   "chat.with": "Razgovor sa ",
   "message.placeholder": "Poruka",
+  "loading" : "Ucitavanje",
+
 
   "dummy": "Dummy"
 }

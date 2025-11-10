@@ -13,6 +13,9 @@
 body {
   height: 100vh;
   background-color: rgb(34, 56, 75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
@@ -25,6 +28,7 @@ body {
 nav {
   height: 9vh;
   background-color: transparent;
+  width: 100vw;
   display: flex;
   /* justify-content: center; */
   align-items: center;
@@ -32,7 +36,7 @@ nav {
   text-transform: uppercase;
 }
 
-nav select{
+nav select {
   border: none;
   outline: none;
   background-color: transparent;
@@ -41,15 +45,14 @@ nav select{
   height: 50px;
   width: 70px;
   cursor: pointer;
-  &:hover{
+  &:hover {
     background-color: var(--blue);
   }
 }
 
-nav select option{
+nav select option {
   color: black;
 }
-
 
 .users-container {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 3px 5px -6px,
@@ -86,8 +89,8 @@ nav select option{
   border: none;
   outline: 1px solid gray;
   cursor: pointer;
-  &:focus{
-    outline:2px solid var(--blue);
+  &:focus {
+    outline: 2px solid var(--blue);
   }
 }
 
@@ -101,19 +104,18 @@ nav select option{
   border-radius: 50%;
   cursor: pointer;
   transition: var(--transition);
-  &:hover{
+  &:hover {
     scale: 1.1;
   }
-  &:active{
+  &:active {
     scale: 1;
   }
-  &:disabled{
-    opacity: .7;
+  &:disabled {
+    opacity: 0.7;
   }
 }
 
-
-.back{
+.back {
   border: none;
   outline: none;
   width: 40px;
@@ -125,15 +127,15 @@ nav select option{
   background-color: white;
   border-radius: 50%;
   cursor: pointer;
-  transition: all .4s ease;
-  margin-right:10px;
+  transition: all 0.4s ease;
+  margin-right: 10px;
   font-size: 14px;
 
-  &:hover{
-    background-color: rgba(22, 104, 195,.1);
+  &:hover {
+    background-color: rgba(22, 104, 195, 0.2);
   }
 
-  &:active{
-    background-color: rgba(22, 104, 195,.3);
+  &:active {
+    background-color: rgba(22, 104, 195, 0.4);
   }
 }

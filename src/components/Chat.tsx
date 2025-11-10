@@ -201,6 +201,7 @@ const Chat = () => {
             })}
             className="message-input"
             id="message-input"
+            autoComplete="off"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />

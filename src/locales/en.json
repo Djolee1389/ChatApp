@@ -21,6 +21,7 @@
   "chat": "Chat",
   "chat.with": "Chat with ",
   "message.placeholder": "Message",
+  "loading" : "Loading",
 
   "dummy": "Dummy"
 }
