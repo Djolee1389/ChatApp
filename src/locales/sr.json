@@ -23,6 +23,19 @@
   "message.placeholder": "Poruka",
   "loading" : "Ucitavanje",
 
+  "save":"Sacuvaj",
+  "cancel": "Otkazi",
+  "delete.account": "Izbrisi nalog",
+  "delete.account.confirm": "Da li ste sigurni da zelite da izbrisete nalog? Ova radnja se ne može poništiti.",
+  "delete.account.success": "Nalog je uspješno izbrisan.",
+  "delete.account.failure": "Brisanje naloga nije uspjelo. Pokušajte ponovo kasnije.",
+  "delete.account.loginagain": "Molimo prijavite se ponovo da biste izbrisali nalog.",
+  
+  "profile.edit" : "Izmjenite profil",
+
+  "avatar.change" : "Izmjenite fotografiju",
+  "avatar.upload" : "Dodajte fotografiju",
+
 
   "dummy": "Dummy"
 }

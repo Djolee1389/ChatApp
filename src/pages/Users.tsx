@@ -5,7 +5,8 @@ import { db, auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useIntl } from "react-intl";
-import { FaSignOutAlt, FaUser } from "react-icons/fa";
+import { FaSignOutAlt, FaUser, FaPen } from "react-icons/fa";
+
 import {
   Container,
   List,
@@ -13,7 +14,13 @@ import {
   ListItemText,
   Button,
   Typography,
+  Dialog,
+  DialogContent,
+  Avatar,
 } from "@mui/material";
+import EditProfile from "../components/EditProfile";
+
+import { IconButton } from "@mui/material";
 
 interface User {
   uid: string;
@@ -25,6 +32,7 @@ export default function Users() {
   const navigate = useNavigate();
   const intl = useIntl();
   const [users, setUsers] = useState<User[]>([]);
+  const [open, setOpen] = useState(false);
 
   const getChatPath = (user1: string, user2: string) => {
     return [user1, user2].join("-");
@@ -67,6 +75,18 @@ export default function Users() {
 
   return (
     <Container sx={{ mt: 4, p: 5, width: 750 }} className="users-container">
+      <Dialog
+        open={open}
+        onClose={(_, reason) => {
+          if (reason === "backdropClick" || reason === "escapeKeyDown") return;
+          setOpen(false);
+        }}
+      >
+        <DialogContent>
+          <EditProfile onDone={() => setOpen(false)} />
+        </DialogContent>
+      </Dialog>
+
       <div
         style={{
           display: "flex",
@@ -83,9 +103,18 @@ export default function Users() {
             gap: "5px",
           }}
         >
-          <FaUser style={{ color: "gray" }} />
+          {auth.currentUser?.photoURL ? (
+            <Avatar src={auth.currentUser.photoURL} />
+          ) : (
+            <FaUser style={{ color: "gray" }} />
+          )}
           {auth.currentUser?.displayName}
+
+          <IconButton onClick={() => setOpen(true)}>
+            <FaPen className="edit-pen" />
+          </IconButton>
         </Typography>
+
         <Button onClick={handleLogout} sx={{ mb: 2 }}>
           {intl.formatMessage({
             id: "logout",

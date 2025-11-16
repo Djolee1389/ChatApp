@@ -21,7 +21,19 @@
   "chat": "Chat",
   "chat.with": "Chat with ",
   "message.placeholder": "Message",
-  "loading" : "Loading",
+  "loading": "Loading",
+
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete.account": "Delete account",
+  "delete.account.confirm": "Are you sure you want to delete your account? This action cannot be undone.",
+  "delete.account.success": "Account deleted successfully.",
+  "delete.account.failure": "Failed to delete account. Try again later.",
+  "delete.account.loginagain": "Please log in again to delete your account.",
+
+  "profile.edit" : "Edit profile",
+  "avatar.change": "Change photo",
+  "avatar.upload": "Upload photo",
 
   "dummy": "Dummy"
 }

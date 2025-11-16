@@ -139,3 +139,15 @@ nav select option {
     background-color: rgba(22, 104, 195, 0.4);
   }
 }
+
+.edit-pen {
+  transition: var(--transition);
+  /* color: rgba(0,0,0,0.7); */
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.edit-pen:hover {
+  color: var(--blue);
+  transform: scale(1.12);
+}

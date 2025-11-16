@@ -46,9 +46,8 @@ const Chat = () => {
   const chatId = [currentUsername, recipientUsername]
     .map((name) => name.replace(/\s+/g, "_"))
     .sort()
-    .join("_");
+    .join("-");
 
-  // Load messages
   useEffect(() => {
     if (!currentUser) return;
     const messagesRef = collection(db, "chats", chatId, "messages");
