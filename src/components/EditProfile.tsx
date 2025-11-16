@@ -7,6 +7,7 @@ import {
   deleteDoc,
   collection,
   getDocs,
+  setDoc,
 } from "firebase/firestore";
 import { Button, TextField, Avatar } from "@mui/material";
 import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
@@ -30,6 +31,8 @@ const EditProfile = ({ onDone }: { onDone: () => void }) => {
   const handleSubmit = async () => {
     if (!user) return;
 
+    const oldUsername = user.displayName || "";
+
     let avatarUrl = user.photoURL;
 
     if (file) {
@@ -48,7 +51,61 @@ const EditProfile = ({ onDone }: { onDone: () => void }) => {
       photoURL: avatarUrl,
     });
 
+    // If username changed, rename chats
+    if (oldUsername && oldUsername !== username) {
+      try {
+        await renameUserChats(oldUsername, username);
+      } catch (err) {
+        console.error("Failed to rename chats:", err);
+      }
+    }
+
     onDone();
+  };
+
+  const renameUserChats = async (
+    oldUsername: string,
+    newUsername: string
+  ): Promise<void> => {
+    const oldNorm = oldUsername.replace(/\s+/g, "_");
+    const newNorm = newUsername.replace(/\s+/g, "_");
+
+    // Get all users to construct chat ids (same logic as Chat.tsx)
+    const usersSnapshot = await getDocs(collection(db, "users"));
+
+    for (const userDoc of usersSnapshot.docs) {
+      const otherUsername = userDoc.data().username;
+      if (!otherUsername || otherUsername === oldUsername) continue;
+
+      const otherNorm = otherUsername.replace(/\s+/g, "_");
+      const oldChatId = [oldNorm, otherNorm].sort().join("-");
+      const newChatId = [newNorm, otherNorm].sort().join("-");
+
+      if (oldChatId === newChatId) continue;
+
+      const oldMessagesRef = collection(db, "chats", oldChatId, "messages");
+      const oldMessagesSnap = await getDocs(oldMessagesRef);
+
+      if (oldMessagesSnap.size > 0) {
+        for (const msgDoc of oldMessagesSnap.docs) {
+          const data = msgDoc.data();
+          await setDoc(
+            doc(db, "chats", newChatId, "messages", msgDoc.id),
+            data
+          );
+        }
+
+        for (const msgDoc of oldMessagesSnap.docs) {
+          await deleteDoc(msgDoc.ref);
+        }
+
+        try {
+          await deleteDoc(doc(db, "chats", oldChatId));
+        } catch (err) {
+          console.warn(`Could not delete old chat doc ${oldChatId}:`, err);
+        }
+      }
+    }
   };
 
   const deleteUserChats = async (username: string) => {
@@ -164,7 +221,7 @@ const EditProfile = ({ onDone }: { onDone: () => void }) => {
           }}
           onClick={() => handleDeleteAccount()}
         >
-         {intl.formatMessage({ id: "delete.account" })}
+          {intl.formatMessage({ id: "delete.account" })}
         </button>
       </div>
     </div>
