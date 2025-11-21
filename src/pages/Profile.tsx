@@ -26,6 +26,7 @@ interface User {
   uid: string;
   username: string;
   email: string;
+  photoURL?: string;
 }
 
 export default function Users() {
@@ -33,6 +34,33 @@ export default function Users() {
   const intl = useIntl();
   const [users, setUsers] = useState<User[]>([]);
   const [open, setOpen] = useState(false);
+  const [currentUserData, setCurrentUserData] = useState<any>(null);
+
+  useEffect(() => {
+    if (!auth.currentUser) return;
+
+    const ref = collection(db, "users");
+    const unsubscribe = onSnapshot(ref, (snapshot) => {
+      const data: User[] = snapshot.docs.map((doc) => {
+        const d = doc.data();
+        return {
+          uid: doc.id,
+          username: d.username || "",
+          email: d.email || "",
+          photoURL: d.photoURL || "",
+        };
+      });
+
+      // all other users
+      setUsers(data.filter((u) => u.uid !== auth.currentUser?.uid));
+
+      // current user from Firestore
+      const me = data.find((u) => u.uid === auth.currentUser?.uid);
+      setCurrentUserData(me || null);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const getChatPath = (user1: string, user2: string) => {
     return [user1, user2].join("-");
@@ -70,7 +98,7 @@ export default function Users() {
     if (!auth.currentUser) return;
     const currentUsername = auth.currentUser.displayName || "Unknown";
     const chatPath = getChatPath(currentUsername, user.username);
-    navigate(`/chat/${chatPath}`);
+    navigate(`/chat/${chatPath}/${user.uid}`);
   };
 
   return (
@@ -100,16 +128,15 @@ export default function Users() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            gap: "5px",
+            gap: "10px",
           }}
         >
-          {auth.currentUser?.photoURL ? (
-            <Avatar src={auth.currentUser.photoURL} />
+          {currentUserData?.photoURL ? (
+            <Avatar src={currentUserData.photoURL} />
           ) : (
             <FaUser style={{ color: "gray" }} />
           )}
-          {auth.currentUser?.displayName}
-
+          {currentUserData?.username || auth.currentUser?.displayName}
           <IconButton onClick={() => setOpen(true)}>
             <FaPen className="edit-pen" />
           </IconButton>
@@ -123,6 +150,7 @@ export default function Users() {
         </Button>
       </div>
       <hr />
+
       <List>
         {users.map((u) => (
           <ListItem key={u.uid} divider className="list-item">

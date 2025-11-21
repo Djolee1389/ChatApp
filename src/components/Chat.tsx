@@ -29,6 +29,7 @@ interface Message {
 
 const Chat = () => {
   const { chatPath } = useParams<{ chatPath: string }>();
+  const { otherUser } = useParams<{ otherUser: string }>();
 
   const navigate = useNavigate();
   const intl = useIntl();
@@ -41,12 +42,8 @@ const Chat = () => {
   const currentUser = auth.currentUser;
   const currentUsername = currentUser?.displayName || "Anonymous";
   const recipientUsername = participants[1] || "Unknown";
-  // console.log(participants)
 
-  const chatId = [currentUsername, recipientUsername]
-    .map((name) => name.replace(/\s+/g, "_"))
-    .sort()
-    .join("-");
+  const chatId = [currentUser?.uid || "", otherUser || ""].sort().join("-");
 
   useEffect(() => {
     if (!currentUser) return;
@@ -76,6 +73,7 @@ const Chat = () => {
         text: textToSend,
         sender: currentUsername,
         createdAt: serverTimestamp(),
+        participants: participants,
       });
     } catch (error) {
       console.error("Error sending message:", error);

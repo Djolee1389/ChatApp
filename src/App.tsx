@@ -2,7 +2,7 @@ import { Select, MenuItem } from "@mui/material";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/LogIn";
 import Signup from "./components/SignUp";
-import Users from "./pages/Users";
+import Users from "./pages/Profile";
 import Chat from "./components/Chat";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
@@ -79,7 +79,7 @@ function App({ setLocale }: { setLocale: (lang: "sr" | "en") => void }) {
             path="/users"
             element={user ? <Users /> : <Navigate to="/login" />}
           />
-          <Route path="/chat/:chatPath" element={<Chat />}></Route>
+          <Route path="/chat/:chatPath/:otherUser" element={<Chat />}></Route>
         </Routes>
       </div>
     </>
