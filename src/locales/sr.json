@@ -36,6 +36,9 @@
   "avatar.change" : "Izmjenite fotografiju",
   "avatar.upload" : "Dodajte fotografiju",
 
+  "users.title": "Korisnici",
+  "chats.title": "Razgovori",
+
 
   "dummy": "Dummy"
 }

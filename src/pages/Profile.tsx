@@ -6,6 +6,7 @@ import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useIntl } from "react-intl";
 import { FaSignOutAlt, FaUser, FaPen } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 import {
   Container,
@@ -33,8 +34,10 @@ export default function Users() {
   const intl = useIntl();
   const [open, setOpen] = useState(false);
   const [currentUserData, setCurrentUserData] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<"users" | "chats">("users");
-
+  const location = useLocation();
+  const initialTab =
+    (location.state?.activeTab as "users" | "chats") || "users";
+  const [activeTab, setActiveTab] = useState<"users" | "chats">(initialTab);
   useEffect(() => {
     if (!auth.currentUser) return;
 
@@ -76,7 +79,9 @@ export default function Users() {
     if (!auth.currentUser) return;
     const currentUsername = auth.currentUser.displayName || "Unknown";
     const chatPath = getChatPath(currentUsername, user.username);
-    navigate(`/chat/${chatPath}/${user.uid}`);
+    navigate(`/chat/${chatPath}/${user.uid}`, {
+      state: { fromTab: activeTab },
+    });
   };
 
   return (
@@ -153,7 +158,7 @@ export default function Users() {
                 transition: "color 0.3s",
               }}
             >
-              {tab === "users" ? "All Users" : "Active Chats"}
+              {tab === "users" ?  intl.formatMessage({ id: "users.title" }) : intl.formatMessage({ id: "chats.title" })}
               <span
                 style={{
                   position: "absolute",
@@ -172,7 +177,7 @@ export default function Users() {
       {activeTab === "users" ? (
         <AllUsers handleChat={handleChat} />
       ) : (
-        <ActiveChats  handleChat={handleChat}/>
+        <ActiveChats handleChat={handleChat} />
       )}
     </Container>
   );

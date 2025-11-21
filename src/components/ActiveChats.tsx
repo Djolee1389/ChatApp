@@ -29,7 +29,6 @@ export default function ActiveChats({
 
       const usersWithChats: User[] = [];
 
-      // For each user, check if there's an active chat
       for (const userDoc of allUsersSnapshot.docs) {
         const userId = userDoc.id;
         if (userId === currentUserId) continue;
@@ -37,7 +36,6 @@ export default function ActiveChats({
         const userData = userDoc.data();
         const chatId = [currentUserId, userId].sort().join("-");
 
-        // Check if messages exist in this chat
         const messagesRef = collection(db, "chats", chatId, "messages");
         const messagesSnapshot = await getDocs(messagesRef);
 

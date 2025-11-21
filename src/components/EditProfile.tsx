@@ -54,7 +54,7 @@ const EditProfile = ({ onDone }: { onDone: () => void }) => {
 
     setIsLoading(true);
     try {
-      const avatarBase64 = file ? preview : user.photoURL || "";
+      const avatarBase64 = preview  || "";
 
       await updateProfile(user, {
         displayName: username,

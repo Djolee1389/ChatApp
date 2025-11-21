@@ -8,16 +8,20 @@ import App from "./App.tsx";
 import messagesEn from "./locales/en.json";
 import messagesSr from "./locales/sr.json";
 
-
 const messages = {
   en: messagesEn,
   sr: messagesSr,
 };
 
-const defaultLocale = navigator.language.split(/[-_]/)[0] || "sr";
+const getSavedLocale = () => {
+  const saved = localStorage.getItem("locale");
+  if (saved === "en" || saved === "sr") return saved;
 
+  const browserLang = navigator.language.split(/[-_]/)[0];
+  return browserLang === "en" || browserLang === "sr" ? browserLang : "sr";
+};
 function Root() {
-  const [locale, setLocale] = useState(defaultLocale);
+  const [locale, setLocale] = useState(getSavedLocale());
 
   return (
     <StrictMode>

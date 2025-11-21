@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaPaperPlane, FaArrowLeft, FaClock } from "react-icons/fa6";
 import { useIntl } from "react-intl";
 import {
@@ -33,6 +33,9 @@ const Chat = () => {
 
   const navigate = useNavigate();
   const intl = useIntl();
+  const location = useLocation();
+  const fromTab = location.state?.fromTab || "users";
+
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -92,6 +95,10 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleGoBack = () => {
+    navigate("/users", { state: { activeTab: fromTab } });
+  };
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -108,7 +115,7 @@ const Chat = () => {
             padding: "10px 15px 10px 0",
           }}
         >
-          <button className="back" onClick={() => navigate("/users")}>
+          <button className="back" onClick={handleGoBack}>
             <FaArrowLeft />
           </button>
           <div>

@@ -35,5 +35,8 @@
   "avatar.change": "Change photo",
   "avatar.upload": "Upload photo",
 
+  "users.title": "Users",
+  "chats.title": "Chats",
+
   "dummy": "Dummy"
 }
