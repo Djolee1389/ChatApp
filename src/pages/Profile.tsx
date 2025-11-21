@@ -9,9 +9,6 @@ import { FaSignOutAlt, FaUser, FaPen } from "react-icons/fa";
 
 import {
   Container,
-  List,
-  ListItem,
-  ListItemText,
   Button,
   Typography,
   Dialog,
@@ -21,6 +18,8 @@ import {
 import EditProfile from "../components/EditProfile";
 
 import { IconButton } from "@mui/material";
+import ActiveChats from "../components/ActiveChats";
+import AllUsers from "../components/AllUsers";
 
 interface User {
   uid: string;
@@ -32,9 +31,9 @@ interface User {
 export default function Users() {
   const navigate = useNavigate();
   const intl = useIntl();
-  const [users, setUsers] = useState<User[]>([]);
   const [open, setOpen] = useState(false);
   const [currentUserData, setCurrentUserData] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"users" | "chats">("users");
 
   useEffect(() => {
     if (!auth.currentUser) return;
@@ -51,10 +50,6 @@ export default function Users() {
         };
       });
 
-      // all other users
-      setUsers(data.filter((u) => u.uid !== auth.currentUser?.uid));
-
-      // current user from Firestore
       const me = data.find((u) => u.uid === auth.currentUser?.uid);
       setCurrentUserData(me || null);
     });
@@ -65,23 +60,6 @@ export default function Users() {
   const getChatPath = (user1: string, user2: string) => {
     return [user1, user2].join("-");
   };
-
-  useEffect(() => {
-    if (!auth.currentUser) return;
-    const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
-      const data = snapshot.docs.map(
-        (doc) =>
-          ({
-            uid: doc.id,
-            username: doc.data().username,
-            email: doc.data().email,
-          } as User)
-      );
-      setUsers(data.filter((u) => u.uid !== auth.currentUser?.uid));
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   const handleLogout = async () => {
     const ok = confirm(
@@ -102,7 +80,10 @@ export default function Users() {
   };
 
   return (
-    <Container sx={{ mt: 4, p: 5, width: 750 }} className="users-container">
+    <Container
+      sx={{ mt: 4, p: 5, minHeight: 500, width: 750 }}
+      className="users-container"
+    >
       <Dialog
         open={open}
         onClose={(_, reason) => {
@@ -151,18 +132,48 @@ export default function Users() {
       </div>
       <hr />
 
-      <List>
-        {users.map((u) => (
-          <ListItem key={u.uid} divider className="list-item">
-            <ListItemText primary={u.username} secondary={u.email} />
-            <Button variant="outlined" onClick={() => handleChat(u)}>
-              {intl.formatMessage({
-                id: "chat",
-              })}
-            </Button>
-          </ListItem>
-        ))}
-      </List>
+      <div
+        style={{
+          display: "flex",
+          gap: "20px",
+          justifyContent: "space-evenly",
+          marginTop: "10px",
+        }}
+      >
+        {["users", "chats"].map((tab) => {
+          const isActive = activeTab === tab;
+          return (
+            <span
+              key={tab}
+              onClick={() => setActiveTab(tab as "users" | "chats")}
+              style={{
+                cursor: "pointer",
+                padding: "8px 0",
+                position: "relative",
+                transition: "color 0.3s",
+              }}
+            >
+              {tab === "users" ? "All Users" : "Active Chats"}
+              <span
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "2px",
+                  backgroundColor: isActive ? "#1668c3" : "transparent",
+                  transition: "background-color 0.3s",
+                }}
+              />
+            </span>
+          );
+        })}
+      </div>
+      {activeTab === "users" ? (
+        <AllUsers handleChat={handleChat} />
+      ) : (
+        <ActiveChats  handleChat={handleChat}/>
+      )}
     </Container>
   );
 }
