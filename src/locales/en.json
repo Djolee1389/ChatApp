@@ -38,5 +38,7 @@
   "users.title": "Users",
   "chats.title": "Chats",
 
+  "no.active.chats": "No active chats",
+
   "dummy": "Dummy"
 }

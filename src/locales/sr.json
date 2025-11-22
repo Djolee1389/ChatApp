@@ -39,6 +39,8 @@
   "users.title": "Korisnici",
   "chats.title": "Razgovori",
 
+  "no.active.chats": "Nema aktivnih razgovora",
+
 
   "dummy": "Dummy"
 }

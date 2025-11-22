@@ -70,7 +70,7 @@ const EditProfile = ({ onDone }: { onDone: () => void }) => {
       console.error("Error updating profile:", err);
     } finally {
       setIsLoading(false);
-    }
+    } 
   };
 
   const deleteUserChats = async (userId: string) => {

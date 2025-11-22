@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs} from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { ListItem, List, ListItemText, Button, Avatar } from "@mui/material";
 import { useIntl } from "react-intl";
@@ -55,7 +55,20 @@ export default function ActiveChats({
     fetchActiveChatUsers();
   }, []);
 
-  return (
+  return users.length === 0 ? (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "280px",
+      }}
+    >
+    <p >
+        {intl.formatMessage({ id: "no.active.chats" })}
+      </p>
+        </div>
+  ) : (
     <List>
       {users.map((u) => (
         <ListItem key={u.uid} divider className="list-item">

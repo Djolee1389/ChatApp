@@ -106,6 +106,7 @@ export default function Users() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          marginBottom: "15px",
         }}
       >
         <Typography
@@ -128,7 +129,7 @@ export default function Users() {
           </IconButton>
         </Typography>
 
-        <Button onClick={handleLogout} sx={{ mb: 2 }}>
+        <Button onClick={handleLogout}>
           {intl.formatMessage({
             id: "logout",
           })}{" "}
@@ -142,6 +143,7 @@ export default function Users() {
           display: "flex",
           gap: "20px",
           justifyContent: "space-evenly",
+          alignItems: "center",
           marginTop: "10px",
         }}
       >
@@ -158,7 +160,9 @@ export default function Users() {
                 transition: "color 0.3s",
               }}
             >
-              {tab === "users" ?  intl.formatMessage({ id: "users.title" }) : intl.formatMessage({ id: "chats.title" })}
+              {tab === "users"
+                ? intl.formatMessage({ id: "users.title" })
+                : intl.formatMessage({ id: "chats.title" })}
               <span
                 style={{
                   position: "absolute",
