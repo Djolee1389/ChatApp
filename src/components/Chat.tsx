@@ -41,7 +41,7 @@ const Chat = () => {
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const participants = chatPath ? chatPath.split("-") : [];
-
+  
   const currentUser = auth.currentUser;
   const currentUsername = currentUser?.displayName || "Anonymous";
   const recipientUsername = participants[1] || "Unknown";

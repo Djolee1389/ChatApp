@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import {
+  collection,
+  // doc,
+  getDocs,
+  // serverTimestamp,
+  // setDoc,
+} from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { ListItem, List, ListItemText, Button, Avatar } from "@mui/material";
 import { useIntl } from "react-intl";
+import { FaTrash } from "react-icons/fa";
+// import { useParams } from "react-router-dom";
 
 interface User {
   uid: string;
@@ -18,6 +26,17 @@ export default function ActiveChats({
 }) {
   const [users, setUsers] = useState<User[]>([]);
   const intl = useIntl();
+
+  // const { chatPath } = useParams<{ chatPath: string }>();
+  // const { otherUser } = useParams<{ otherUser: string }>();
+
+  // const participants = chatPath ? chatPath.split("-") : [];
+
+  // const currentUser = auth.currentUser;
+  // const currentUsername = currentUser?.displayName || "Anonymous";
+  // const recipientUsername = participants[1] || "Unknown";
+
+  // const chatId = [currentUser?.uid || "", otherUser || ""].sort().join("-");
 
   useEffect(() => {
     if (!auth.currentUser) return;
@@ -55,6 +74,21 @@ export default function ActiveChats({
     fetchActiveChatUsers();
   }, []);
 
+  const handleDeleteChat = async () => {
+    //  await setDoc(
+    //       doc(db, "chats", chatId),
+    //       {
+    //         deletedBy: [
+    //           {
+    //             userId: currentUser?.uid || "",
+    //             deletedAt: serverTimestamp(),
+    //           },
+    //         ],
+    //       },
+    //       { merge: true }
+    //     );
+  };
+
   return users.length === 0 ? (
     <div
       style={{
@@ -64,10 +98,8 @@ export default function ActiveChats({
         height: "280px",
       }}
     >
-    <p >
-        {intl.formatMessage({ id: "no.active.chats" })}
-      </p>
-        </div>
+      <p>{intl.formatMessage({ id: "no.active.chats" })}</p>
+    </div>
   ) : (
     <List>
       {users.map((u) => (
@@ -77,6 +109,15 @@ export default function ActiveChats({
           <Button variant="outlined" onClick={() => handleChat(u)}>
             {intl.formatMessage({ id: "chat" })}
           </Button>
+          <FaTrash
+            style={{
+              marginLeft: "10px",
+              cursor: "pointer",
+              color: "red",
+              fontSize: "18px",
+            }}
+            onClick={handleDeleteChat}
+          ></FaTrash>
         </ListItem>
       ))}
     </List>
